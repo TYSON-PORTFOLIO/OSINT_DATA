@@ -1,1 +1,500 @@
-# OSINT_DATA
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSINT Data Finder | @tyson_owner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #f0f0f0;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 20px auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+        }
+        
+        header h1 {
+            font-size: 3.2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .channel {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff0084, #33001b);
+            padding: 8px 20px;
+            border-radius: 30px;
+            margin: 10px 0;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 10px auto 0;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        
+        .disclaimer {
+            background: rgba(200, 0, 0, 0.3);
+            border-left: 4px solid #ff5252;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .search-section {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .input-group {
+            display: flex;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .input-group input {
+            flex: 1;
+            padding: 18px 25px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 10px 0 0 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #00c6ff;
+            box-shadow: 0 0 15px rgba(0, 198, 255, 0.5);
+        }
+        
+        .input-group button {
+            padding: 0 35px;
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 0 10px 10px 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .input-group button:hover {
+            background: linear-gradient(45deg, #0072ff, #00c6ff);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 114, 255, 0.4);
+        }
+        
+        .search-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 25px;
+            justify-content: center;
+        }
+        
+        .option-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+        
+        .option-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .option-btn.active {
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3);
+        }
+        
+        .results-section {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .info-card {
+            background: rgba(30, 30, 60, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border-color: rgba(0, 198, 255, 0.3);
+        }
+        
+        .info-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #00c6ff;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.4rem;
+        }
+        
+        .info-card p {
+            margin: 12px 0;
+            display: flex;
+            font-size: 1.05rem;
+        }
+        
+        .info-card p span:first-child {
+            font-weight: 600;
+            min-width: 180px;
+            color: #b0e0e6;
+        }
+        
+        .info-card p span:last-child {
+            color: #ffffff;
+            flex: 1;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 25px;
+            font-size: 1rem;
+            color: #aaa;
+            margin-top: auto;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+        }
+        
+        .featured-channel {
+            background: linear-gradient(45deg, #ff0084, #33001b);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        .featured-channel h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        .channel-link {
+            display: inline-block;
+            background: white;
+            color: #ff0084;
+            padding: 12px 35px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.3rem;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .channel-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 0, 132, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .input-group input {
+                border-radius: 10px;
+                margin-bottom: 15px;
+                padding: 15px 20px;
+            }
+            
+            .input-group button {
+                border-radius: 10px;
+                width: 100%;
+                padding: 15px;
+                justify-content: center;
+            }
+            
+            .results-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            header h1 {
+                font-size: 2.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-search"></i> OSINT Data Finder</h1>
+            <div class="channel">@tyson_owner</div>
+            <p>Advanced open-source intelligence tool for phone number analysis and SIM owner information retrieval</p>
+        </header>
+        
+        <div class="disclaimer">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Disclaimer:</strong> This tool is for educational purposes only. The information provided is simulated and does not access real databases. Always respect privacy laws and regulations in your jurisdiction.
+        </div>
+        
+        <div class="featured-channel">
+            <h2><i class="fab fa-telegram"></i> Join Our Telegram Channel</h2>
+            <p>For more OSINT tools, techniques and resources</p>
+            <a href="#" class="channel-link">@tyson_owner</a>
+        </div>
+        
+        <div class="search-section">
+            <h2><i class="fas fa-phone-alt"></i> Phone Number Information Lookup</h2>
+            <p>Enter a phone number to retrieve OSINT information including carrier, location, and SIM owner details.</p>
+            
+            <div class="input-group">
+                <input type="text" id="phoneInput" placeholder="Enter phone number (e.g. +1 555 123 4567)" value="+1 555 789 4561">
+                <button id="searchBtn"><i class="fas fa-search"></i> Analyze Number</button>
+            </div>
+            
+            <div class="search-options">
+                <div class="option-btn active"><i class="fas fa-mobile-alt"></i> Phone Lookup</div>
+                <div class="option-btn"><i class="fas fa-address-card"></i> SIM Owner</div>
+                <div class="option-btn"><i class="fas fa-map-marker-alt"></i> Location</div>
+                <div class="option-btn"><i class="fas fa-network-wired"></i> Carrier Info</div>
+                <div class="option-btn"><i class="fas fa-history"></i> Call History</div>
+            </div>
+        </div>
+        
+        <div class="results-section" id="resultsSection">
+            <div class="results-header">
+                <h2><i class="fas fa-file-alt"></i> Analysis Results for +1 555 789 4561</h2>
+                <div class="option-btn"><i class="fas fa-download"></i> Export Report</div>
+            </div>
+            
+            <div class="results-grid">
+                <div class="info-card">
+                    <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+                    <p><span>Phone Number:</span> <span>+1 555 789 4561</span></p>
+                    <p><span>Formatted:</span> <span>(555) 789-4561</span></p>
+                    <p><span>Number Type:</span> <span>Mobile</span></p>
+                    <p><span>Valid:</span> <span>Yes</span></p>
+                    <p><span>Risk Level:</span> <span>Low</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h3><i class="fas fa-user"></i> SIM Owner Details</h3>
+                    <p><span>Name:</span> <span>Jonathan Davis</span></p>
+                    <p><span>Address:</span> <span>123 Main St, New York, NY</span></p>
+                    <p><span>ID Type:</span> <span>Driver's License</span></p>
+                    <p><span>ID Number:</span> <span>NY12345678</span></p>
+                    <p><span>Activation Date:</span> <span>2023-05-15</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h3><i class="fas fa-tower-cell"></i> Carrier Information</h3>
+                    <p><span>Carrier:</span> <span>AT&T Mobility</span></p>
+                    <p><span>Network:</span> <span>4G LTE</span></p>
+                    <p><span>Country:</span> <span>United States</span></p>
+                    <p><span>Region:</span> <span>Northeast</span></p>
+                    <p><span>IMEI:</span> <span>35******78912345</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h3><i class="fas fa-map-marked-alt"></i> Location Data</h3>
+                    <p><span>Primary Location:</span> <span>New York City, NY</span></p>
+                    <p><span>Time Zone:</span> <span>EST (UTC-5)</span></p>
+                    <p><span>Last Known:</span> <span>2023-10-15 14:23 EST</span></p>
+                    <p><span>Coordinates:</span> <span>40.7128° N, 74.0060° W</span></p>
+                    <p><span>Accuracy:</span> <span>1.2 km</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h3><i class="fas fa-shield-alt"></i> Security Info</h3>
+                    <p><span>Spam Reports:</span> <span>0</span></p>
+                    <p><span>Fraud Score:</span> <span>12/100</span></p>
+                    <p><span>Blacklists:</span> <span>None</span></p>
+                    <p><span>Reputation:</span> <span>Good</span></p>
+                    <p><span>Encryption:</span> <span>AES-256</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h3><i class="fas fa-history"></i> Activity History</h3>
+                    <p><span>Call Frequency:</span> <span>Moderate</span></p>
+                    <p><span>Avg Calls/Day:</span> <span>8.7</span></p>
+                    <p><span>Primary Contacts:</span> <span>3 people</span></p>
+                    <p><span>Last Call:</span> <span>Today 10:45 AM</span></p>
+                    <p><span>Data Usage:</span> <span>4.2 GB/month</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>OSINT Data Finder v3.0 | Featured Channel: @tyson_owner | This is a simulated tool for educational purposes only | © 2023 OSINT Research Group</p>
+        </div>
+    </div>
+
+    <script>
+        // Simulate search functionality
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            const phoneInput = document.getElementById('phoneInput').value.trim();
+            const searchBtn = document.getElementById('searchBtn');
+            
+            if (!phoneInput) {
+                alert('Please enter a phone number');
+                return;
+            }
+            
+            // Basic validation
+            if (!/^\+?[0-9\s\-\(\)]{7,20}$/.test(phoneInput)) {
+                alert('Please enter a valid phone number');
+                return;
+            }
+            
+            // Show loading state
+            searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+            searchBtn.disabled = true;
+            
+            // Change header text
+            const resultsHeader = document.querySelector('.results-header h2');
+            resultsHeader.innerHTML = `<i class="fas fa-file-alt"></i> Analysis Results for ${phoneInput}`;
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                // Show results
+                document.getElementById('resultsSection').style.display = 'block';
+                
+                // Reset button
+                searchBtn.innerHTML = '<i class="fas fa-search"></i> Analyze Number';
+                searchBtn.disabled = false;
+                
+                // Scroll to results
+                document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+                
+                // Add animation to cards
+                const cards = document.querySelectorAll('.info-card');
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        card.offsetHeight; // Trigger reflow
+                        card.style.transition = 'all 0.5s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100 * index);
+                });
+            }, 2000);
+        });
+        
+        // Initialize with results visible for demo purposes
+        window.onload = function() {
+            document.getElementById('resultsSection').style.display = 'block';
+            
+            // Add option button interactions
+            const optionBtns = document.querySelectorAll('.option-btn');
+            optionBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    optionBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        };
+    </script>
+</body>
+</html>
